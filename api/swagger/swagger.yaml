@@ -134,7 +134,7 @@ paths:
           description: In incorrecto
         404:
           description: Paquete no encontrado.
-  /paquetes/{idPaquete}/servicio:
+  /paquetes/{idPaquete}/servicios:
     get:
       tags: 
       - paquetes
@@ -152,7 +152,7 @@ paths:
       responses:
         200:
           description: OK
-  /paquetes/{idPaquete}/servicio/{idServicio}:
+  /paquetes/{idPaquete}/servicios/{idServicio}:
     put:
       tags: 
       - paquetes
@@ -305,7 +305,7 @@ paths:
             description: Servicio invalido
           404:
             description: Servicio no encontrado 
-  /proveedor:
+  /proveedores:
     get:
       tags:
       - proveedores
@@ -349,7 +349,7 @@ paths:
       responses:
         405:
           description: Invalid input
-  /proveedor/{idProveedor}:
+  /proveedores/{idProveedor}:
     get:
       tags:
       - proveedores
@@ -413,7 +413,7 @@ paths:
             description: Proveedor invalido
           404:
             description: Proveedor no encontrado
-  /proveedor/{idProveedor}/servicio:
+  /proveedores/{idProveedor}/servicios:
     get:
       tags: 
       - proveedores
@@ -431,7 +431,7 @@ paths:
       responses:
         200:
           description: OK
-  /proveedor/{idProveedor}/servicio/{idServicio}:
+  /proveedores/{idProveedor}/servicios/{idServicio}:
     put:
       tags: 
       - proveedores
