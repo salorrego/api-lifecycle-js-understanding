@@ -1,0 +1,797 @@
+swagger: '2.0'
+info:
+  description: This is a simple API for JADE
+  version: 1.0.0
+  title: Simple JADE API
+  # put the contact info for your development or API team
+  contact:
+    email: you@your-company.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: paquetes
+  description: paquetes de boda disponibles
+- name: servicios
+  description: servicios proveídos para eventos
+- name: proveedores
+  description: proveedores de servicios recomendados
+- name: certificaciones
+  description: certificacione de jade
+- name: bodas
+  description: bodas planeadas
+  
+paths:
+  /paquetes:
+    # defines a controller for the path
+    x-swagger-router-controller: paquetes
+    get:
+      tags:
+      - paquetes
+      summary: paquetes de boda disponibles
+      # OperationId is the function inside the controller
+      operationId: buscarPaquete
+      description: paquetes disponibles en venta
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: searchString
+        description: pass an optional search string for looking up inventory
+        required: false
+        type: string
+      responses:
+        200:
+          description: paquetes encontrados por la búsqueda
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Paquete'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - paquetes
+      summary: Crea nuevos paquetes de boda
+      operationId: crearPaquete
+      description: Crea nuevos paquetes de bodas
+      consumes: 
+        - application/json
+      parameters:
+        - in: body
+          name: paquete
+          description: El paquete a crear
+          schema:
+            $ref: '#/definitions/Paquete'
+      responses:
+        200:
+          description: Paquete creado con éxito
+  /paquetes/{idPaquete}:
+    get:
+      tags:
+      - paquetes
+      summary: paquetes de boda disponibles
+      operationId: buscarPaquetePorId
+      description: paquetes disponibles en venta
+      produces:
+      - application/json
+      parameters:
+        - name: idPaquete
+          in: path
+          description: pass an optional search string for looking up inventory
+          required: true
+          type: string
+      responses:
+        200:
+          description: paquetes encontrados por la búsqueda
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Paquete'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - paquetes
+      summary: actualizar propiedades de paquete
+      operationId: actualizarPaquete
+      description: actualizar cualquier valor de un paquete
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idPaquete
+        description: id del paquete a actualizar
+        required: true
+        type: string
+      responses:
+        200:
+          description: paquete actualizado correctamente
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Paquete'
+    delete:
+      tags:
+        - paquetes
+      summary: Borra un paquete
+      description: Elimina un paquete de bodas
+      operationId: deletePaquete
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPaquete
+          in: path
+          description: Id del paquete a eliminar
+          required: true
+          type: integer
+          format: int64
+      responses:
+        400:
+          description: In incorrecto
+        404:
+          description: Paquete no encontrado.
+  /paquetes/{idPaquete}/servicio:
+    get:
+      tags: 
+      - paquetes
+      summary: Obtiene la lista de servicios de un paquete.
+      description: Lista de servicios de paquetes.
+      operationId: buscarServicioPaquete
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPaquete
+          in: path
+          description: Identificación del paquete al que se le desea agregar el servicio.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+  /paquetes/{idPaquete}/servicio/{idServicio}:
+    put:
+      tags: 
+      - paquetes
+      summary: Agrega servicios al paquete.
+      description: Agrega servicios al paquete.
+      operationId: adicionarServicioEnPaquete
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPaquete
+          in: path
+          description: Identificación del paquete al que se le desea agregar el servicio.
+          required: true
+          type: string
+        - name: idServicio
+          in: path
+          description: Identificación del servicio que se desea agregar.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+    delete:
+      tags: 
+      - paquetes
+      summary: Elimina un servicio de un paquete.
+      description: Elimina un servicio de un paquete.
+      operationId: deleteServicioDePaquete
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPaquete
+          in: path
+          description: Identificación del paquete al que se le desea agregar el servicio.
+          required: true
+          type: string
+        - name: idServicio
+          in: path
+          description: Identificación del servicio que se desea agregar.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+  /servicios:
+    get:
+      tags:
+      - servicios
+      summary: Lista de servicios disponibles
+      operationId: buscarServicio
+      description: servicios disponibles en paquetes disponibles en venta
+      produces:
+      - application/json
+      parameters:
+        - name: idServicio
+          in: path
+          description: id del servicio que se desea buscar
+          required: true
+          type: string
+      responses:
+        200:
+          description: Operacion correcta
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Servicio'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - servicios
+      summary: Adiciona un nuevo servicio
+      operationId: crearServicio
+      description: Crea un nuevo servicio
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: servicio
+        description: Paquete que se busca adicionar 
+        required: true
+        schema:
+          $ref: '#/definitions/Servicio'
+      responses:
+        405:
+          description: Invalid input
+  /servicios/{idServicio}:
+    get:
+      tags:
+      - servicios
+      summary: Lista de servicios disponibles
+      operationId: buscarServicioPorId
+      description: servicios disponibles en paquetes disponibles en venta
+      produces:
+      - application/json
+      parameters:
+        - name: idServicio
+          in: path
+          description: id del servicio que se desea buscar
+          required: true
+          type: string
+      responses:
+        200:
+          description: Operacion correcta
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Servicio'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - servicios
+      summary: Actualiza un servicio dado su id
+      operationId: actualizarServicio
+      description: Actualiza un servicio dado su id
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idServicio
+        description: Servicio buscado
+        required: true
+        type: string
+      responses:
+        200:
+          description: Servicio actualizado correctamente
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Servicio'
+    delete:
+        tags:
+        - servicios
+        summary: Elimina un servicio
+        description: Elimina un servicio
+        operationId: deleteServicio
+        produces:
+        - application/json
+        parameters:
+        - name: idServicio
+          in: path
+          description: El Id del servicio a eliminar
+          required: true
+          type: string
+        responses:
+          400:
+            description: Servicio invalido
+          404:
+            description: Servicio no encontrado 
+  /proveedor:
+    get:
+      tags:
+      - proveedores
+      summary: Lista de proveedores disponibles
+      operationId: buscarProveedor
+      description: proveedores disponibles para servicios de bodas
+      produces:
+      - application/json
+      parameters:
+        - name: idProveedor
+          in: path
+          description: id del proveedor que se desea buscar
+          required: true
+          type: string
+      responses:
+        200:
+          description: Operacion correcta
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Proveedor'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - proveedores
+      summary: Adiciona un nuevo proveedor
+      operationId: crearProveedor
+      description: Crea un nuevo proveedor
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: proveedor
+        description: proveedor que se busca adicionar 
+        required: true
+        schema:
+          $ref: '#/definitions/Proveedor'
+      responses:
+        405:
+          description: Invalid input
+  /proveedor/{idProveedor}:
+    get:
+      tags:
+      - proveedores
+      summary: Lista de proveedores disponibles
+      operationId: buscarProveedorPorId
+      description: proveedores disponibles para servicios
+      produces:
+      - application/json
+      parameters:
+        - name: idProveedor
+          in: path
+          description: id del proveedor que se desea buscar
+          required: true
+          type: string
+      responses:
+        200:
+          description: Operacion correcta
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Proveedor'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - proveedores
+      summary: Actualiza un proveedor dado su id
+      operationId: actualizarProveedor
+      description: Actualiza un proveedor dado su id
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idProveedor
+        description: Proveedor buscado
+        required: true
+        type: string
+      responses:
+        200:
+          description: Proveedor actualizado correctamente
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Proveedor'
+    delete:
+        tags:
+        - proveedores
+        summary: Elimina un proveedor
+        description: Elimina un proveedor
+        operationId: deleteProveedor
+        produces:
+        - application/json
+        parameters:
+        - name: idProveedor
+          in: path
+          description: El Id del proveedor a eliminar
+          required: true
+          type: string
+        responses:
+          400:
+            description: Proveedor invalido
+          404:
+            description: Proveedor no encontrado
+  /proveedor/{idProveedor}/servicio:
+    get:
+      tags: 
+      - proveedores
+      summary: Obtiene la lista de servicios de un proveedor.
+      description: Lista de servicios de un proveedor.
+      operationId: buscarServicioProveedor
+      produces: 
+      - application/json
+      parameters: 
+        - name: idProveedor
+          in: path
+          description: Identificación del proveedor al cual se le desean listar sus servicios
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+  /proveedor/{idProveedor}/servicio/{idServicio}:
+    put:
+      tags: 
+      - proveedores
+      summary: Agrega servicios al proveedor.
+      description: Agrega servicios al proveedor.
+      operationId: adicionarServicioProveedor
+      produces: 
+      - application/json
+      parameters: 
+        - name: idProveedor
+          in: path
+          description: Identificación del proveedor al que se le desea agregar el servicio.
+          required: true
+          type: string
+        - name: idServicio
+          in: path
+          description: Identificación del servicio que se desea agregar.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+    delete:
+      tags: 
+      - proveedores
+      summary: Elimina un servicio de un paquete.
+      description: Elimina un servicio de un paquete.
+      operationId: deleteServicioDeProveedor
+      produces: 
+      - application/json
+      parameters: 
+        - name: idProveedor
+          in: path
+          description: Identificación del proveedor al que se le desea agregar el servicio.
+          required: true
+          type: string
+        - name: idServicio
+          in: path
+          description: Identificación del servicio que se desea agregar.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+  /certificaciones:
+    get:
+      tags:
+      - certificaciones
+      summary: Listado de Certificaciones obtenidas por Jade
+      operationId: listarCertificaciones
+      description: Lista las certificaciones obtenidas por la Jade
+      produces:
+      - application/json
+      parameters:
+        - name: q
+          in: query
+          description: Texto para filtrar por nombres de Certificaciones
+          required: false
+          type: string
+      responses:
+        200:
+          description: Operacion correcta
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Certificacion'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - certificaciones
+      summary: Crea una nueva Certificación
+      operationId: crearCertificacion
+      description: Crea una nueva Certificación
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: certificacion
+        description: Objeto Certificacion
+        required: true
+        schema:
+          $ref: '#/definitions/Certificacion'
+      responses:
+        201:
+          description: Created
+        405:
+          description: Invalid input
+  /certificaciones/{idCertificacion}:
+    get:
+      tags:
+      - certificaciones
+      summary: Devuelve el detalle de una Certificación
+      operationId: obtenerCertificacionPorId
+      description: Devuelve el detalle de una Certificación por ID
+      produces:
+      - application/json
+      parameters:
+        - name: idCertificacion
+          in: path
+          description: ID de la Certificación a buscar
+          required: true
+          type: string
+      responses:
+        200:
+          description: Operacion correcta
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Certificacion'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - certificaciones
+      summary: Actualiza una Certificación por ID
+      operationId: actualizarCertificacionPorId
+      description: Actualiza una Certificación por ID
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idCertificacion
+        description: ID de la Certificación a editar
+        required: true
+        type: string
+      responses:
+        200:
+          description: Certificación actualizada correctamente
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Certificacion'
+    delete:
+        tags:
+        - certificaciones
+        summary: Elimina una Certificación
+        description: Elimina una Certificación
+        operationId: deleteCertificacionPorId
+        produces:
+        - application/json
+        parameters:
+        - name: idCertificacion
+          in: path
+          description: ID de la Certificación a eliminar
+          required: true
+          type: string
+        responses:
+          400:
+            description: Petición inválida
+          404:
+            description: Certificación no encontrada
+  /bodas:
+    get:
+      tags:
+      - bodas
+      summary: bodas registradas en el sistema
+      operationId: buscarBoda
+      description: bodas registradas disponibles
+      produces: 
+      - application/json
+      parameters:
+      - in: query
+        name: filtroBodas
+        description: filtro a aplicar para buscar bodas específicas
+        required: false
+        type: string
+      responses:
+        200:
+          description: bodas encontradas
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Boda'
+    post:
+      tags:
+      - bodas
+      summary: Crea una nueva boda
+      operationId: crearBoda
+      description: Crea una nueva boda
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: boda
+        description: Objeto Boda
+        required: true
+        schema:
+          $ref: '#/definitions/Boda'
+      responses:
+        201:
+          description: Created
+        405:
+          description: Invalid input
+  /bodas/{idBoda}:
+    get:
+      tags:
+      - bodas
+      summary: boda específica registrada
+      operationId: obtenerBoda
+      description: boda específica registrada
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idBoda
+        description: id de la boda a actualizar
+        required: true
+        type: string
+      responses:
+        200:
+          description: boda actualizada correctamente
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Boda'
+    put:
+      tags:
+      - bodas
+      summary: actualizar servicios de la boda
+      operationId: actualizarBoda
+      description: actualizar los servicios de una boda
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idBoda
+        description: id de la boda a actualizar
+        required: true
+        type: string
+      - in: body
+        name: servicesToUpdate
+        description: servicios a añadir
+        required: true
+        schema:
+          $ref: '#/definitions/Servicio'
+      responses:
+        200:
+          description: boda actualizada correctamente
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Boda'
+    delete:
+      tags:
+        - bodas
+      summary: Borra una boda
+      description: Elimina una boda
+      operationId: deleteBoda
+      produces: 
+      - application/json
+      parameters: 
+        - name: idBoda
+          in: path
+          description: Id de la boda a eliminar
+          required: true
+          type: string
+      responses:
+        400:
+          description: In incorrecto
+        404:
+          description: Boda no encontrada    
+definitions:
+  Paquete:
+    type: object
+    required:
+    - id
+    - nombre
+    - precio
+    - servicios
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      nombre:
+        type: string
+        example: Bronze
+      precio:
+        type: integer
+        example : 35000
+      servicios:
+        type: array
+        items: 
+          $ref: '#/definitions/Servicio'
+  Servicio:
+    required:
+    - id
+    - name
+    - precio
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      name:
+        type: string
+        example: Flores
+      precio:
+        type: integer
+        example: 2000
+  Boda:
+    required:
+    - id
+    - servicios
+    - paquete
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      servicios:
+        type: array
+        items:
+          $ref: '#/definitions/Servicio'
+      paquete:
+        type: object
+        items:
+          $ref: '#/definitions/Paquete'
+  Proveedor:
+    required:
+    - id
+    - nombre
+    - telefono
+    properties:
+      id:
+        type: string
+        example: 619619
+      nombre:
+        type: string
+        example: Flores
+      telefono:
+        type: string
+        example: 310-322 54 41
+      servicios:
+        type: array
+        items: 
+          $ref: '#/definitions/Servicio'
+  Certificacion:
+    required:
+    - id
+    - name
+    - date
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      name:
+        type: string
+        example: Oscar
+      date:
+        type: string
+        example: 12/05/1988
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /jelopezta/Jade_Customized_Events/1.0.0
+schemes:
+ - https
