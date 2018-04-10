@@ -16,8 +16,8 @@ host: localhost:10010
 # basePath prefixes all resource paths
 basePath: /
 schemes:
-- https
-- http
+  - https
+  - http
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
@@ -27,16 +27,16 @@ produces:
 
 # tags are used for organizing operations
 tags:
-- name: packages
-  description: packages for weddings available
-- name: services
-  description: services for events
-- name: providers
-  description: service providers recommended
-- name: certifications
-  description: JADE certifications
-- name: weddings
-  description: planned weddings
+  - name: packages
+    description: packages for weddings available
+  - name: services
+    description: services for events
+  - name: providers
+    description: service providers recommended
+  - name: certifications
+    description: JADE certifications
+  - name: weddings
+    description: planned weddings
   
 paths:
   /packages:
@@ -47,15 +47,16 @@ paths:
       # OperationId is the function inside the controller
       operationId: searchPackages
       parameters:
-      - in: query
-        name: package
-        description: pass an optional search string for looking up inventory
-        required: false
-        type: string
+        - in: query
+          name: package
+          description: pass an optional search string for looking up inventory
+          required: false
+          type: string
       responses:
         "200":
           description: packages found by search
           schema:
+            type: array
             items:
               $ref: '#/definitions/Package'
         "400":
@@ -78,830 +79,830 @@ paths:
       responses:
         200:
           description: Success creating package
-#   /packages/{idPackage}:
-#     get:
-#       tags:
-#       - packages
-#       summary: Wedding packages available
-#       operationId: searchPackageById
-#       description: packages available for sale
-#       produces:
-#       - application/json
-#       parameters:
-#         - name: idPackage
-#           in: path
-#           description: pass an optional search string for looking up inventory
-#           required: true
-#           type: integer
-#       responses:
-#         200:
-#           description: package found by search
-#           schema:
-#             items:
-#               $ref: '#/definitions/Package'
-#         400:
-#           description: bad input parameter
-#     put:
-#       tags:
-#       - packages
-#       summary: Update package properties
-#       operationId: updatePackage
-#       description: Update any package value
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: path
-#         name: idPackage
-#         description: Package ID to update
-#         required: true
-#         type: integer
-#       responses:
-#         200:
-#           description: Success updating package
-#     delete:
-#       tags:
-#         - packages
-#       summary: Delete a package
-#       description: Delete a wedding package
-#       operationId: deletePackage
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idPackage
-#           in: path
-#           description: pathPackage ID to delete
-#           required: true
-#           type: string
-#       responses:
-#         400:
-#           description: Bad input
-#         404:
-#           description: Package not found.
-#   /packages/{idPackage}/services:
-#     get:
-#       tags: 
-#       - packages
-#       summary: Gets services from a package.
-#       description: Services list of a package.
-#       operationId: searchServiceByPackage
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idPackage
-#           in: path
-#           description: Package ID for services search.
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         400:
-#           description: Bad input
-#         404:
-#           description: Package not found.
-#   /packages/{idPackage}/services/{idService}:
-#     get:
-#       tags: 
-#       - packages
-#       summary: gets a service from the package.
-#       description: gets a service from the package.
-#       operationId: getServiceInPackage
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idPackage
-#           in: path
-#           description: ID of the Package to get the service.
-#           required: true
-#           type: string
-#         - name: idService
-#           in: path
-#           description: ID of the service to get.
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         400:
-#           description: Bad input
-#         404:
-#           description: Package/Service not found.
-#     put:
-#       tags: 
-#       - packages
-#       summary: Adds/Updates a service to the package.
-#       description: Adds/Updates a service to the package.
-#       operationId: serviceInPackage
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idPackage
-#           in: path
-#           description: ID of the Package to add/update the service.
-#           required: true
-#           type: string
-#         - name: idService
-#           in: path
-#           description: ID of the service to add/update.
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         400:
-#           description: Bad input
-#         404:
-#           description: Package/Service not found.
-#     delete:
-#       tags: 
-#       - packages
-#       summary: deletes a service from a package.
-#       description: deletes a service from a package.
-#       operationId: deleteServiceFromPackage
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idPackage
-#           in: path
-#           description: ID of the package to delete the service from.
-#           required: true
-#           type: string
-#         - name: idService
-#           in: path
-#           description: ID of the service to delete from the package.
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         400:
-#           description: Bad input
-#         404:
-#           description: Package/Service not found.
-#   /services:
-#     get:
-#       tags:
-#       - services
-#       summary: List of available services
-#       operationId: searchService
-#       description: Services available to add to packages
-#       produces:
-#       - application/json
-#       parameters:
-#         - name: service
-#           in: query
-#           description: ID of the service to search
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: array
-#             items:
-#               $ref: '#/definitions/Service'
-#         400:
-#           description: bad input parameter.
-#         404:
-#           description: Service not found.
-#     post:
-#       tags:
-#       - services
-#       summary: Adds new service
-#       operationId: createService
-#       description: Creates new available service
-#       consumes:
-#       - application/json
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: body
-#         name: service
-#         description: Service to create
-#         required: true
-#         schema:
-#           $ref: '#/definitions/Service'
-#       responses:
-#         200:
-#           description: Service created OK
-#           schema:
-#             type: array
-#             items:
-#               $ref: '#/definitions/Service'
-#         400:
-#           description: Invalid input
-#   /services/{idService}:
-#     get:
-#       tags:
-#       - service
-#       summary: gets the service with the idService
-#       operationId: searchServiceById
-#       description: gets the service with the idService
-#       produces:
-#       - application/json
-#       parameters:
-#         - name: idService
-#           in: path
-#           description: Service id to do the search
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: array
-#             items:
-#               $ref: '#/definitions/Service'
-#         400:
-#           description: bad input parameter
-#         404:
-#           description: Service not found.
-#     put:
-#       tags:
-#       - service
-#       summary: Updates a service
-#       operationId: updateService
-#       description: Updates a service according to it's ID
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: path
-#         name: idService
-#         description: Service to update
-#         required: true
-#         type: string
-#       responses:
-#         200:
-#           description: Service updated OK
-#           schema:
-#             type: object
-#             items:
-#               $ref: '#/definitions/Service'
-#     delete:
-#         tags:
-#         - service
-#         summary: Deletes available service
-#         description: Deletes available service
-#         operationId: deleteService
-#         produces:
-#         - application/json
-#         parameters:
-#         - name: idService
-#           in: path
-#           description: Service's ID to delete the service
-#           required: true
-#           type: string
-#         responses:
-#           200:
-#             description: Service deleted
-#           400:
-#             description: invalid input
-#           404:
-#             description: Service not found
-#   /providers:
-#     get:
-#       tags:
-#       - providers
-#       summary: List of available providers
-#       operationId: searchProvider
-#       description: Weddings providers available
-#       produces:
-#       - application/json
-#       parameters:
-#         - name: idProvider
-#           in: query
-#           description: provider id to search
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: array
-#             items:
-#               $ref: '#/definitions/Provider'
-#         400:
-#           description: bad input parameter
-#     post:
-#       tags:
-#       - providers
-#       summary: Creates new provider
-#       operationId: addProvider
-#       description: Creates new provider
-#       consumes:
-#       - application/json
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: body
-#         name: provider
-#         description: provider to create
-#         required: true
-#         schema:
-#           $ref: '#/definitions/Provider'
-#       responses:
-#         200:
-#           description: Provider created
-#           schema:
-#             type: array
-#             items:
-#               $ref: '#/definitions/Provider'
-#         405:
-#           description: Invalid input
-#   /providers/{idProvider}:
-#     get:
-#       tags:
-#       - provider
-#       summary: gets a provider by ID
-#       operationId: getProviderById
-#       description: gets a provider by ID
-#       produces:
-#       - application/json
-#       parameters:
-#         - name: idProvider
-#           in: path
-#           description: provider's ID to get the provider
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: array
-#             items:
-#               $ref: '#/definitions/Provider'
-#         400:
-#           description: bad input parameter
-#     put:
-#       tags:
-#       - provider
-#       summary: Updates provider by ID
-#       operationId: updateProvider
-#       description: Updates provider by ID
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: path
-#         name: idProvider
-#         description: ID of the Provider to update
-#         required: true
-#         type: string
-#       responses:
-#         200:
-#           description: Provider updated OK
-#           schema:
-#             type: object
-#             items:
-#               $ref: '#/definitions/Provider'
-#     delete:
-#         tags:
-#         - provider
-#         summary: Deletes provider
-#         description: Deletes provider
-#         operationId: deleteProvider
-#         produces:
-#         - application/json
-#         parameters:
-#         - name: idProvider
-#           in: path
-#           description: Id of the provider to delete
-#           required: true
-#           type: string
-#         responses:
-#           200:
-#             description: Provider deleted OK
-#             schema:
-#               type: object
-#               items:
-#                 $ref: '#/definitions/Provider'
-#           400:
-#             description: invalid provider
-#           404:
-#             description: Provider not found
-#   /providers/{idProvider}/services:
-#     get:
-#       tags: 
-#       - provider
-#       - services
-#       summary: Gets the services of a single provider.
-#       description: Gets the services of a single provider.
-#       operationId: getProviderServices
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idProvider
-#           in: path
-#           description: ID of the provider to get the services from
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         400:
-#           description: invalid provider
-#         404:
-#           description: Provider not found
-#     put:
-#       tags: 
-#       - provider
-#       - services
-#       summary: Adds a service to the provider.
-#       description: Adds a service to the provider.
-#       operationId: addServiceToProvider
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idProvider
-#           in: path
-#           description: ID of the provider to add the service
-#           required: true
-#           type: string
-#         - name: idService
-#           in: header
-#           description: Service to add (from available services)
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         400:
-#           description: invalid provider/service
-#         404:
-#           description: Provider/Service not found
-#   /providers/{idProvider}/services/{idService}:
-#     get:
-#       tags: 
-#       - provider
-#       - service
-#       summary: Gets a service of a single provider.
-#       description: Gets a service of a single provider.
-#       operationId: getProviderServiceById
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idProvider
-#           in: path
-#           description: ID of the provider to get the service from
-#           required: true
-#           type: string
-#         - name: idService
-#           in: path
-#           description: ID of the service to get
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         404:
-#           description: Provider/service not found
-#     delete:
-#       tags: 
-#       - provider
-#       - service
-#       summary: Deletes a service of the provider
-#       description: Deletes a service of the provider
-#       operationId: deleteServiceFromProvider
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idProvider
-#           in: path
-#           description: ID of the provider to delete the service from
-#           required: true
-#           type: string
-#         - name: idService
-#           in: path
-#           description: ID of the service to delete from the provider
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#         404:
-#           description: Provider/service not found
-#   /certifications:
-#     get:
-#       tags:
-#       - certifications
-#       summary: List of the certification that JADE's has
-#       description: List of the certification that JADE's has
-#       operationId: getCertification
-#       produces:
-#       - application/json
-#       parameters:
-#         - name: q
-#           in: query
-#           description: param to filter the list of certifications
-#           required: false
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: array
-#             items:
-#               $ref: '#/definitions/Certification'
-#         400:
-#           description: bad input parameter
-#         404:
-#           description: certification not found
-#     post:
-#       tags:
-#       - certifications
-#       summary: Creates a new certification
-#       operationId: addCertification
-#       description: Creates a new certification
-#       consumes:
-#       - application/json
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: body
-#         name: certification
-#         description: Certification object
-#         required: true
-#         schema:
-#           $ref: '#/definitions/Certification'
-#       responses:
-#         201:
-#           description: Certification created
-#         400:
-#           description: Invalid input
-#   /certifications/{idCertification}:
-#     get:
-#       tags:
-#       - certification
-#       summary: Gets one certification by ID
-#       description: Gets one certification by ID
-#       operationId: getCertificationById
-#       produces:
-#       - application/json
-#       parameters:
-#         - name: idCertification
-#           in: path
-#           description: ID of the certification to get
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: object
-#             items:
-#               $ref: '#/definitions/Certification'
-#         400:
-#           description: bad input parameter
-#     put:
-#       tags:
-#       - certification
-#       summary: Updates certification by id
-#       operationId: updateCertificationById
-#       description: Updates certification by id
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: path
-#         name: idCertification
-#         description: ID de la Certificación a editar
-#         required: true
-#         type: string
-#       responses:
-#         200:
-#           description: Certification updated
-#           schema:
-#             type: object
-#             items:
-#               $ref: '#/definitions/Certification'
-#         400:
-#           description: bad input parameter
-#     delete:
-#         tags:
-#         - certification
-#         summary: Deletes a certification
-#         description: Deletes a certification
-#         operationId: deleteCertificationById
-#         produces:
-#         - application/json
-#         parameters:
-#         - name: idCertification
-#           in: path
-#           description: ID of the certification to delete
-#           required: true
-#           type: string
-#         responses:
-#           200:
-#             description: Certification updated
-#             schema:
-#               type: object
-#               items:
-#                 $ref: '#/definitions/Certification'
-#           400:
-#             description: invalid request
-#           404:
-#             description: Certification not found
-#   /weddings:
-#     get:
-#       tags:
-#       - weddings
-#       summary: gets all the weddings available on the system
-#       description: gets all the weddings available on the system
-#       operationId: getWedding
-#       produces: 
-#       - application/json
-#       parameters:
-#       - in: query
-#         name: weddingFilter
-#         description: parameter to filter the response
-#         required: false
-#         type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: array
-#             items: 
-#               $ref: '#/definitions/Wedding'
-#         404:
-#             description: Weddings not found
-#     post:
-#       tags:
-#       - weddings
-#       summary: Creates a new Wedding
-#       description: Creates a new Wedding
-#       operationId: addWedding
-#       consumes:
-#       - application/json
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: body
-#         name: wedding
-#         description: Wedding Object
-#         required: true
-#         schema:
-#           $ref: '#/definitions/Wedding'
-#       responses:
-#         201:
-#           description: Created
-#         405:
-#           description: Invalid input
-#   /weddings/{idWedding}:
-#     get:
-#       tags:
-#       - wedding
-#       summary: Gets a single wedding by id
-#       description: Gets a single wedding by id
-#       operationId: getWeddingByID
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: path
-#         name: idWedding
-#         description: Id of the wedding to get
-#         required: true
-#         type: string
-#       responses:
-#         200:
-#           description: OK
-#           schema:
-#             type: object
-#             items:
-#               $ref: '#/definitions/Wedding'
-#     put:
-#       tags:
-#       - wedding
-#       - package
-#       summary: Updates a Wedding
-#       operationId: updateWedding
-#       description: Updates a Wedding
-#       produces:
-#       - application/json
-#       parameters:
-#       - in: path
-#         name: idWedding
-#         description: ID of the wedding to update
-#         required: true
-#         type: string
-#       - in: body
-#         name: packageToUpdate
-#         description: package to update in wedding
-#         required: true
-#         schema:
-#           $ref: '#/definitions/Package'
-#       responses:
-#         200:
-#           description: Wedding updated
-#           schema:
-#             type: object
-#             items:
-#               $ref: '#/definitions/Wedding'
-#     delete:
-#       tags:
-#         - wedding
-#       summary: Deletes a wedding
-#       description: Deletes a wedding
-#       operationId: deleteWedding
-#       produces: 
-#       - application/json
-#       parameters: 
-#         - name: idWedding
-#           in: path
-#           description: ID of the wedding to delete
-#           required: true
-#           type: string
-#       responses:
-#         200:
-#           description: Wedding Deleted
-#         404:
-#           description: Wedding not found
+  /packages/{idPackage}:
+    get:
+      tags:
+      - packages
+      summary: Wedding packages available
+      operationId: searchPackageById
+      description: packages available for sale
+      produces:
+      - application/json
+      parameters:
+        - name: idPackage
+          in: path
+          description: pass an optional search string for looking up inventory
+          required: true
+          type: integer
+      responses:
+        200:
+          description: package found by search
+          schema:
+            items:
+              $ref: '#/definitions/Package'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - packages
+      summary: Update package properties
+      operationId: updatePackage
+      description: Update any package value
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idPackage
+        description: Package ID to update
+        required: true
+        type: integer
+      responses:
+        200:
+          description: Success updating package
+    delete:
+      tags:
+        - packages
+      summary: Delete a package
+      description: Delete a wedding package
+      operationId: deletePackage
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPackage
+          in: path
+          description: pathPackage ID to delete
+          required: true
+          type: string
+      responses:
+        400:
+          description: Bad input
+        404:
+          description: Package not found.
+  /packages/{idPackage}/services:
+    get:
+      tags: 
+      - packages
+      summary: Gets services from a package.
+      description: Services list of a package.
+      operationId: searchServiceByPackage
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPackage
+          in: path
+          description: Package ID for services search.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad input
+        404:
+          description: Package not found.
+  /packages/{idPackage}/services/{idService}:
+    get:
+      tags: 
+      - packages
+      summary: gets a service from the package.
+      description: gets a service from the package.
+      operationId: getServiceInPackage
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPackage
+          in: path
+          description: ID of the Package to get the service.
+          required: true
+          type: string
+        - name: idService
+          in: path
+          description: ID of the service to get.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad input
+        404:
+          description: Package/Service not found.
+    put:
+      tags: 
+      - packages
+      summary: Adds/Updates a service to the package.
+      description: Adds/Updates a service to the package.
+      operationId: serviceInPackage
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPackage
+          in: path
+          description: ID of the Package to add/update the service.
+          required: true
+          type: string
+        - name: idService
+          in: path
+          description: ID of the service to add/update.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad input
+        404:
+          description: Package/Service not found.
+    delete:
+      tags: 
+      - packages
+      summary: deletes a service from a package.
+      description: deletes a service from a package.
+      operationId: deleteServiceFromPackage
+      produces: 
+      - application/json
+      parameters: 
+        - name: idPackage
+          in: path
+          description: ID of the package to delete the service from.
+          required: true
+          type: string
+        - name: idService
+          in: path
+          description: ID of the service to delete from the package.
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad input
+        404:
+          description: Package/Service not found.
+  /services:
+    get:
+      tags:
+      - services
+      summary: List of available services
+      operationId: searchService
+      description: Services available to add to packages
+      produces:
+      - application/json
+      parameters:
+        - name: service
+          in: query
+          description: ID of the service to search
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+        400:
+          description: bad input parameter.
+        404:
+          description: Service not found.
+    post:
+      tags:
+      - services
+      summary: Adds new service
+      operationId: createService
+      description: Creates new available service
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: service
+        description: Service to create
+        required: true
+        schema:
+          $ref: '#/definitions/Service'
+      responses:
+        200:
+          description: Service created OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+        400:
+          description: Invalid input
+  /services/{idService}:
+    get:
+      tags:
+      - service
+      summary: gets the service with the idService
+      operationId: searchServiceById
+      description: gets the service with the idService
+      produces:
+      - application/json
+      parameters:
+        - name: idService
+          in: path
+          description: Service id to do the search
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+        400:
+          description: bad input parameter
+        404:
+          description: Service not found.
+    put:
+      tags:
+      - service
+      summary: Updates a service
+      operationId: updateService
+      description: Updates a service according to it's ID
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idService
+        description: Service to update
+        required: true
+        type: string
+      responses:
+        200:
+          description: Service updated OK
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Service'
+    delete:
+        tags:
+        - service
+        summary: Deletes available service
+        description: Deletes available service
+        operationId: deleteService
+        produces:
+        - application/json
+        parameters:
+        - name: idService
+          in: path
+          description: Service's ID to delete the service
+          required: true
+          type: string
+        responses:
+          200:
+            description: Service deleted
+          400:
+            description: invalid input
+          404:
+            description: Service not found
+  /providers:
+    get:
+      tags:
+      - providers
+      summary: List of available providers
+      operationId: searchProvider
+      description: Weddings providers available
+      produces:
+      - application/json
+      parameters:
+        - name: idProvider
+          in: query
+          description: provider id to search
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Provider'
+        400:
+          description: bad input parameter
+    post:
+      tags:
+      - providers
+      summary: Creates new provider
+      operationId: addProvider
+      description: Creates new provider
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: provider
+        description: provider to create
+        required: true
+        schema:
+          $ref: '#/definitions/Provider'
+      responses:
+        200:
+          description: Provider created
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Provider'
+        405:
+          description: Invalid input
+  /providers/{idProvider}:
+    get:
+      tags:
+      - provider
+      summary: gets a provider by ID
+      operationId: getProviderById
+      description: gets a provider by ID
+      produces:
+      - application/json
+      parameters:
+        - name: idProvider
+          in: path
+          description: provider's ID to get the provider
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Provider'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - provider
+      summary: Updates provider by ID
+      operationId: updateProvider
+      description: Updates provider by ID
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idProvider
+        description: ID of the Provider to update
+        required: true
+        type: string
+      responses:
+        200:
+          description: Provider updated OK
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Provider'
+    delete:
+        tags:
+        - provider
+        summary: Deletes provider
+        description: Deletes provider
+        operationId: deleteProvider
+        produces:
+        - application/json
+        parameters:
+        - name: idProvider
+          in: path
+          description: Id of the provider to delete
+          required: true
+          type: string
+        responses:
+          200:
+            description: Provider deleted OK
+            schema:
+              type: object
+              items:
+                $ref: '#/definitions/Provider'
+          400:
+            description: invalid provider
+          404:
+            description: Provider not found
+  /providers/{idProvider}/services:
+    get:
+      tags: 
+      - provider
+      - services
+      summary: Gets the services of a single provider.
+      description: Gets the services of a single provider.
+      operationId: getProviderServices
+      produces: 
+      - application/json
+      parameters: 
+        - name: idProvider
+          in: path
+          description: ID of the provider to get the services from
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: invalid provider
+        404:
+          description: Provider not found
+    put:
+      tags: 
+      - provider
+      - services
+      summary: Adds a service to the provider.
+      description: Adds a service to the provider.
+      operationId: addServiceToProvider
+      produces: 
+      - application/json
+      parameters: 
+        - name: idProvider
+          in: path
+          description: ID of the provider to add the service
+          required: true
+          type: string
+        - name: idService
+          in: header
+          description: Service to add (from available services)
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        400:
+          description: invalid provider/service
+        404:
+          description: Provider/Service not found
+  /providers/{idProvider}/services/{idService}:
+    get:
+      tags: 
+      - provider
+      - service
+      summary: Gets a service of a single provider.
+      description: Gets a service of a single provider.
+      operationId: getProviderServiceById
+      produces: 
+      - application/json
+      parameters: 
+        - name: idProvider
+          in: path
+          description: ID of the provider to get the service from
+          required: true
+          type: string
+        - name: idService
+          in: path
+          description: ID of the service to get
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        404:
+          description: Provider/service not found
+    delete:
+      tags: 
+      - provider
+      - service
+      summary: Deletes a service of the provider
+      description: Deletes a service of the provider
+      operationId: deleteServiceFromProvider
+      produces: 
+      - application/json
+      parameters: 
+        - name: idProvider
+          in: path
+          description: ID of the provider to delete the service from
+          required: true
+          type: string
+        - name: idService
+          in: path
+          description: ID of the service to delete from the provider
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+        404:
+          description: Provider/service not found
+  /certifications:
+    get:
+      tags:
+      - certifications
+      summary: List of the certification that JADE's has
+      description: List of the certification that JADE's has
+      operationId: getCertification
+      produces:
+      - application/json
+      parameters:
+        - name: q
+          in: query
+          description: param to filter the list of certifications
+          required: false
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Certification'
+        400:
+          description: bad input parameter
+        404:
+          description: certification not found
+    post:
+      tags:
+      - certifications
+      summary: Creates a new certification
+      operationId: addCertification
+      description: Creates a new certification
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: certification
+        description: Certification object
+        required: true
+        schema:
+          $ref: '#/definitions/Certification'
+      responses:
+        201:
+          description: Certification created
+        400:
+          description: Invalid input
+  /certifications/{idCertification}:
+    get:
+      tags:
+      - certification
+      summary: Gets one certification by ID
+      description: Gets one certification by ID
+      operationId: getCertificationById
+      produces:
+      - application/json
+      parameters:
+        - name: idCertification
+          in: path
+          description: ID of the certification to get
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Certification'
+        400:
+          description: bad input parameter
+    put:
+      tags:
+      - certification
+      summary: Updates certification by id
+      operationId: updateCertificationById
+      description: Updates certification by id
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idCertification
+        description: ID de la Certificación a editar
+        required: true
+        type: string
+      responses:
+        200:
+          description: Certification updated
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Certification'
+        400:
+          description: bad input parameter
+    delete:
+        tags:
+        - certification
+        summary: Deletes a certification
+        description: Deletes a certification
+        operationId: deleteCertificationById
+        produces:
+        - application/json
+        parameters:
+        - name: idCertification
+          in: path
+          description: ID of the certification to delete
+          required: true
+          type: string
+        responses:
+          200:
+            description: Certification updated
+            schema:
+              type: object
+              items:
+                $ref: '#/definitions/Certification'
+          400:
+            description: invalid request
+          404:
+            description: Certification not found
+  /weddings:
+    get:
+      tags:
+      - weddings
+      summary: gets all the weddings available on the system
+      description: gets all the weddings available on the system
+      operationId: getWedding
+      produces: 
+      - application/json
+      parameters:
+      - in: query
+        name: weddingFilter
+        description: parameter to filter the response
+        required: false
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Wedding'
+        404:
+            description: Weddings not found
+    post:
+      tags:
+      - weddings
+      summary: Creates a new Wedding
+      description: Creates a new Wedding
+      operationId: addWedding
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: wedding
+        description: Wedding Object
+        required: true
+        schema:
+          $ref: '#/definitions/Wedding'
+      responses:
+        201:
+          description: Created
+        405:
+          description: Invalid input
+  /weddings/{idWedding}:
+    get:
+      tags:
+      - wedding
+      summary: Gets a single wedding by id
+      description: Gets a single wedding by id
+      operationId: getWeddingByID
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idWedding
+        description: Id of the wedding to get
+        required: true
+        type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Wedding'
+    put:
+      tags:
+      - wedding
+      - package
+      summary: Updates a Wedding
+      operationId: updateWedding
+      description: Updates a Wedding
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: idWedding
+        description: ID of the wedding to update
+        required: true
+        type: string
+      - in: body
+        name: packageToUpdate
+        description: package to update in wedding
+        required: true
+        schema:
+          $ref: '#/definitions/Package'
+      responses:
+        200:
+          description: Wedding updated
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Wedding'
+    delete:
+      tags:
+        - wedding
+      summary: Deletes a wedding
+      description: Deletes a wedding
+      operationId: deleteWedding
+      produces: 
+      - application/json
+      parameters: 
+        - name: idWedding
+          in: path
+          description: ID of the wedding to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: Wedding Deleted
+        404:
+          description: Wedding not found
   /swagger:
     x-swagger-pipe: swagger_raw
 definitions:
   Package:
     required:
       - id
-      # - name
-      # - price
-      # - services
+      - name
+      - price
+      - services
     properties:
       id:
         type: string
         example: dff33444ab
-      # name:
-      #   type: string
-      #   example: Silver
-      # price:
-      #   type: integer
-      #   format: int64
-      #   example : 35000
-      # services:
-      #   type: array
-      #   items: 
-      #     $ref: '#/definitions/Service'
-  # Service:
-  #   required:
-  #     - id
-  #     - name
-  #     - price
-  #   properties:
-  #     id:
-  #       type: string
-  #       example: abc442cd
-  #     name:
-  #       type: string
-  #       example: Flowers
-  #     price:
-  #       type: integer
-  #       example: 2000
-#   Wedding:
-#     required:
-#       - id
-#       - date
-#       - package
-#     properties:
-#       id:
-#         type: string
-#         example: cbddf323
-#       date:
-#         type: string
-#         format: date
-#         example: "1996-12-19T16:39:57-08:00"
-#       package:
-#         type: object
-#         items:
-#           $ref: '#/definitions/Package'
-#   Provider:
-#     required:
-#       - id
-#       - name
-#       - telephone
-#     properties:
-#       id:
-#         type: string
-#         example: cbddf323
-#       name:
-#         type: string
-#         example: Flores
-#       telephone:
-#         type: string
-#         example: "310-322-5441"
-#       services:
-#         type: array
-#         items: 
-#           $ref: '#/definitions/Service'
-#   Certification:
-#     required:
-#       - id
-#       - name
-#       - date
-#     properties:
-#       id:
-#         type: string
-#         example: cbddf323
-#       name:
-#         type: string
-#         example: Oscar
-#       date:
-#         type: string
-#         format: date
-#         example: "1996-12-19T16:39:57-08:00"
+      name:
+        type: string
+        example: Silver
+      price:
+        type: integer
+        format: int64
+        example : 35000
+      services:
+        type: array
+        items: 
+          $ref: '#/definitions/Service'
+  Service:
+    required:
+      - id
+      - name
+      - price
+    properties:
+      id:
+        type: string
+        example: abc442cd
+      name:
+        type: string
+        example: Flowers
+      price:
+        type: integer
+        example: 2000
+  Wedding:
+    required:
+      - id
+      - date
+      - package
+    properties:
+      id:
+        type: string
+        example: cbddf323
+      date:
+        type: string
+        format: date
+        example: "1996-12-19T16:39:57-08:00"
+      package:
+        type: object
+        items:
+          $ref: '#/definitions/Package'
+  Provider:
+    required:
+      - id
+      - name
+      - telephone
+    properties:
+      id:
+        type: string
+        example: cbddf323
+      name:
+        type: string
+        example: Flores
+      telephone:
+        type: string
+        example: "310-322-5441"
+      services:
+        type: array
+        items: 
+          $ref: '#/definitions/Service'
+  Certification:
+    required:
+      - id
+      - name
+      - date
+    properties:
+      id:
+        type: string
+        example: cbddf323
+      name:
+        type: string
+        example: Oscar
+      date:
+        type: string
+        format: date
+        example: "1996-12-19T16:39:57-08:00"

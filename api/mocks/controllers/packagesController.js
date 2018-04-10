@@ -3,8 +3,7 @@ const util = require('util');
 
 function searchPackages(req, res) {
   // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  // console.log(req.query.package);
-  const packagesToGet = req.query.package || 'all';
+  const packagesToGet = req.query.package.value || 'all';
   let packages = [];
   let package = {
     id: packagesToGet,
@@ -20,6 +19,7 @@ function searchPackages(req, res) {
     package.id = "123";
     package.name = "testPackage";
     package.price = 100;
+    console.log(package);
   }
   packages.push(package);
   
