@@ -27,6 +27,21 @@ function searchPackages(req, res) {
   res.json(packages);
 }
 
+function createPackage(req, res) {
+  let packages = [];
+  let package = {
+    id: '123',
+    name: "",
+    price: 0,
+    services: [
+      {id: "0", name: "", price: 0}
+    ]
+  };
+  console.log(req.swagger.operation.parameters.package);
+  res.sendStatus(200);
+}
+
 module.exports = {
-  searchPackages: searchPackages
+  searchPackages: searchPackages,
+  createPackage: createPackage
 };

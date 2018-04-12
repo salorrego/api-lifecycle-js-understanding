@@ -70,14 +70,14 @@ paths:
       consumes: 
         - application/json
       parameters:
-        - in: body
-          name: package
-          required: true
+        - name: package
+          in: body
+          required: false
           description: Package to create
           schema:
             $ref: '#/definitions/Package'
       responses:
-        200:
+        "200":
           description: Success creating package
   /packages/{idPackage}:
     get:
@@ -820,7 +820,6 @@ paths:
 definitions:
   Package:
     required:
-      - id
       - name
       - price
       - services
@@ -833,7 +832,6 @@ definitions:
         example: Silver
       price:
         type: integer
-        format: int64
         example : 35000
       services:
         type: array
@@ -841,7 +839,6 @@ definitions:
           $ref: '#/definitions/Service'
   Service:
     required:
-      - id
       - name
       - price
     properties:
@@ -856,7 +853,6 @@ definitions:
         example: 2000
   Wedding:
     required:
-      - id
       - date
       - package
     properties:
@@ -873,7 +869,6 @@ definitions:
           $ref: '#/definitions/Package'
   Provider:
     required:
-      - id
       - name
       - telephone
     properties:
@@ -892,7 +887,6 @@ definitions:
           $ref: '#/definitions/Service'
   Certification:
     required:
-      - id
       - name
       - date
     properties:
